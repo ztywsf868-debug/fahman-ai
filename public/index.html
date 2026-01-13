@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Fahman AI</title>
+<style>
+body { font-family: Arial; text-align:center; }
+#chat { height:300px; overflow:auto; border:1px solid #ccc; padding:10px; }
+input { width:80%; padding:8px; }
+button { padding:8px 15px; background:#33AFFF; color:white; border:none; }
+</style>
+</head>
+<body>
+
+<h2>👋 أهلاً أنا Fahman AI</h2>
+
+<div id="chat"></div><br>
+<input id="msg" placeholder="اكتب سؤالك...">
+<button onclick="send()">إرسال</button>
+
+<script>
+async function send(){
+  let msg = document.getElementById("msg").value;
+  if(!msg) return;
+
+  let chat = document.getElementById("chat");
+  chat.innerHTML += `<div><b>أنت:</b> ${msg}</div>`;
+
+  const res = await fetch("/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  });
+
+  const data = await res.json();
+  chat.innerHTML += `<div><b>Fahman:</b> ${data.reply}</div>`;
+  document.getElementById("msg").value = "";
+}
+</script>
+
+</body>
+</html>
